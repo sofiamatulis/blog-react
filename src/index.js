@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch  } from 'react-router-dom';
+import promise from 'redux-promise';
 
 // BrowserRouter interacts with the history library, and decides what to do based on the change in the url. look at the entire url when
 // deciding what to show on the screen
@@ -10,30 +11,24 @@ import { BrowserRouter, Route } from 'react-router-dom';
 // Route -- component that we can render anywhere. provides the configuration: if the url looks like this it shows
 // different things --> customization to react router
 
-import App from './components/app';
 import reducers from './reducers';
+import PostsIndex from './components/posts_index';
+import PostsNew from './components/posts_new';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
-class Hello extends React.Component {
-  render() {
-    return <div>hello</div>
-  }
-}
-
-class Goodbye extends React.Component {
-  render() {
-    return <div>goodbye</div>
-  }
-}
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
     <div>
-      <Route  path="/hello" component={Hello}/>
-      <Route  path="/goodbye" component={Goodbye}/>
+      <Switch>
+        <Route path="/posts/new" component={PostsNew} />
+        <Route path="/" component={PostsIndex} />
+      </Switch>
     </div>
     </BrowserRouter>
   </Provider>
   , document.querySelector('.container'));
+// most specific routes at the top
+// switch doesnt let multiple routes show
