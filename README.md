@@ -6,3 +6,5 @@ Blog Using React
 Using this API
 
 http://reduxblog.herokuapp.com/
+
+http://localhost:8080/
