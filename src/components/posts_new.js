@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createPost } from '../actions';
 
 // reduxForm is a function --> similar to the connect helper
 // helper from the reducer
@@ -29,7 +32,9 @@ class PostsNew extends Component {
   // instead of writing onChange={field.input.onChange} and so on
 
   onSubmit(values) {
-    console.log(values);
+    this.props.createPost(values, () => {
+      this.props.history.push('/');
+    });
   }
 
   render() {
@@ -55,6 +60,7 @@ class PostsNew extends Component {
         component={this.renderField}
         />
         <button type="submit" className="btn btn-primary">Submit</button>
+        <Link className="btn btn-danger" to="/">Cancel</Link>
       </form>
     );
   }
@@ -82,9 +88,13 @@ export default reduxForm({
   validate,
   form: 'PostsNewForm'
   // unique string if you want to have more than one form! -- will handle different forms correctly
-})(PostsNew);
+})(
+  connect (null, { createPost }) (PostsNew)
+);
 
 // connect directly to the reducer
+
+//options request-- safety
 
 // component field is what keeps the data and will show whats coming from the reducer
 // redux form handles the state of the form! it doesnt take care of posting
